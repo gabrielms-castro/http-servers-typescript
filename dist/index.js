@@ -1,12 +1,11 @@
 import express from "express";
+import { handlerReadiness } from "./api/readiness.js";
+import { middlewareLogResponses } from "./middlewares/logResponses.js";
 const app = express();
 const PORT = 8080;
 app.use("/app", express.static("./src/app"));
+app.use(middlewareLogResponses);
 app.get("/healthz", handlerReadiness);
-async function handlerReadiness(req, res) {
-    res.set("Content-Type", "text/plain; charset=utf-8");
-    res.status(200).send("OK");
-}
 app.listen(PORT, () => {
     console.log(`Server is running at http://localhost:${PORT}`);
 });
