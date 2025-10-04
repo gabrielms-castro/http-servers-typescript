@@ -9,16 +9,15 @@ import { middlewareIncrementHits } from "./middlewares/incrementHits.js";
 const app = express();
 const PORT = 8080;
 
-app.use("/app", middlewareIncrementHits)
-
-app.use("/app", express.static("./src/app"))
 
 // middlewares
-app.use(middlewareLogResponses)
+app.use(middlewareLogResponses);
+app.use(express.json());
 
-// routes
+    // routes
+app.use("/app", middlewareIncrementHits, express.static("./src/app"));
 app.get("/api/healthz", handlerReadiness);
-app.post("/api/validate_chirp", handlerValidateChirp)
+app.post("/api/validate_chirp", handlerValidateChirp);
 
 //admin
 app.post("/admin/reset", handlerResetIncrementHits);
