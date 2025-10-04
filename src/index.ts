@@ -16,9 +16,11 @@ app.use("/app", express.static("./src/app"))
 app.use(middlewareLogResponses)
 
 // routes
-app.get("/healthz", handlerReadiness);
-app.get("/metrics", handlerIncrementHits);
-app.get("/reset", handlerResetIncrementHits);
+app.get("/api/healthz", handlerReadiness);
+
+//admin
+app.get("/admin/reset", handlerResetIncrementHits);
+app.get("/admin/metrics", handlerIncrementHits);
 
 app.listen(PORT, () => {
     console.log(`Server is running at http://localhost:${PORT}/app`);
