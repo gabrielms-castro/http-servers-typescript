@@ -1,5 +1,6 @@
 import express from "express"
 import { handlerReadiness } from "./api/handlerReadiness.js";
+import { handlerValidateChirp } from "./api/handlerValidateChirp.js";
 import { handlerIncrementHits, handlerResetIncrementHits } from "./api/handlerIncrementHits.js";
 
 import { middlewareLogResponses } from "./middlewares/logResponses.js";
@@ -17,9 +18,10 @@ app.use(middlewareLogResponses)
 
 // routes
 app.get("/api/healthz", handlerReadiness);
+app.post("/api/validate_chirp", handlerValidateChirp)
 
 //admin
-app.get("/admin/reset", handlerResetIncrementHits);
+app.post("/admin/reset", handlerResetIncrementHits);
 app.get("/admin/metrics", handlerIncrementHits);
 
 app.listen(PORT, () => {
