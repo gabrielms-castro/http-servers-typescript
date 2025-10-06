@@ -1,18 +1,21 @@
-import type { Request, Response } from "express";
+import type { NextFunction, Request, Response } from "express";
 import { profaneWords } from "./configs.js";
+import { BadRequestError } from "../utils/errors.js";
 
 export async function handlerValidateChirp(req: Request, res: Response) {
-    type parameters = {
-        body: string;
-    }
+
+    type parameters = { body: string }
     const params: parameters = req.body;
     let text = params.body;
 
     if (!isMaxChirpsLengthValid(text)) {
-        res.status(400).send(JSON.stringify({ "error": "Chirp is too long" }))
-        return;
+        throw new BadRequestError("Chirp is too long. Max length is 140")
     }
-    res.status(200).send(JSON.stringify({ "cleanedBody": removeProfame(text) }))
+    res.status(200).send(JSON.stringify(
+        {
+            "cleanedBody": removeProfane(text)
+        }
+    ));
 }
 
 function isMaxChirpsLengthValid(text: string, maxChirpLength: number = 140): boolean {
@@ -21,7 +24,7 @@ function isMaxChirpsLengthValid(text: string, maxChirpLength: number = 140): boo
     return true;
 }
 
-function removeProfame(text: string): string {
+function removeProfane(text: string): string {
     const textArray = text.split(" ");
 
     for (let i=0; i < textArray.length; i++) {
