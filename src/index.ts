@@ -6,10 +6,10 @@ import { handlerIncrementHits, handlerResetIncrementHits } from "./api/handlerIn
 import { middlewareLogResponses } from "./middlewares/logResponses.js";
 import { middlewareIncrementHits } from "./middlewares/incrementHits.js";
 import { middlewareErrorHandler } from "./middlewares/errorHandler.js";
+import { envOrThrow } from "./api/configs.js";
 
 const app = express();
 const PORT = 8080;
-
 
 // middlewares
 app.use(middlewareLogResponses);

@@ -1,5 +1,5 @@
 import type { Request, Response } from "express";
-import { apiConfig } from "../configs/config.js";
+import { apiConfig } from "./configs.js";
 
 export async function handlerIncrementHits(_: Request, res: Response): Promise<void> {
   res.set("Content-Type", "text/html; charset=utf-8");
