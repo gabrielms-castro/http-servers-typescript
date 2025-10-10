@@ -1,5 +1,5 @@
 import type { NextFunction, Request, Response } from "express";
-import { profaneWords } from "./configs.js";
+import { profaneWords } from "../configs.js";
 import { BadRequestError } from "../utils/errors.js";
 
 export async function handlerValidateChirp(req: Request, res: Response) {

@@ -1,8 +1,8 @@
 import { Request, Response, NextFunction } from "express";
-import { apiConfig } from "../api/configs.js";
+import { config } from "../configs.js";
 
 export function middlewareIncrementHits(req: Request, _: Response, next: NextFunction) {
     // increment fileserverHits property from APIConfig type every time it's called
-    apiConfig.fileserverHits++
+    config.api.fileserverHits++
     next();
 }

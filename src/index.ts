@@ -1,4 +1,8 @@
 import express from "express"
+import postgres from "postgres";
+import { migrate } from 'drizzle-orm/postgres-js/migrator'
+import { drizzle } from 'drizzle-orm/postgres-js'
+
 import { handlerReadiness } from "./api/handlerReadiness.js";
 import { handlerValidateChirp } from "./api/handlerValidateChirp.js";
 import { handlerIncrementHits, handlerResetIncrementHits } from "./api/handlerIncrementHits.js";
@@ -6,10 +10,12 @@ import { handlerIncrementHits, handlerResetIncrementHits } from "./api/handlerIn
 import { middlewareLogResponses } from "./middlewares/logResponses.js";
 import { middlewareIncrementHits } from "./middlewares/incrementHits.js";
 import { middlewareErrorHandler } from "./middlewares/errorHandler.js";
-import { envOrThrow } from "./api/configs.js";
+import { config } from "./configs.js";
+
+const migrationClient = postgres(config.db.url, { max: 1 })
+await migrate(drizzle(migrationClient), config.db.migrationConfig)
 
 const app = express();
-const PORT = 8080;
 
 // middlewares
 app.use(middlewareLogResponses);
@@ -36,8 +42,8 @@ app.get("/admin/metrics", (req, res, next) => {
 // error-handling middleware
 app.use(middlewareErrorHandler)
 
-app.listen(PORT, () => {
-    console.log(`Server is running at http://localhost:${PORT}/app`);
+app.listen(config.api.port, () => {
+    console.log(`Server is running at http://localhost:${config.api.port}/app`);
 })
 
 
