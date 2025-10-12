@@ -1,10 +1,27 @@
+import { eq } from 'drizzle-orm';
 import { db } from '../index.js'
-import { chirps } from '../schema.js'
+import { chirps, NewChirp } from '../schema.js'
 
-export async function createChirp(body: string, userId: string) {
+export async function createChirp(chirp: NewChirp) {
     const [result] = await db
         .insert(chirps)
-        .values({ body: body, userId: userId})
+        .values(chirp)
         .returning();
     return result;
+}
+
+export async function listAllChirps() {
+    const query = await db
+        .select()
+        .from(chirps)
+        .orderBy(chirps.createdAt)
+    return query ?? null;
+}
+
+export async function getChirp(chirpId: string) {
+    const [query] = await db
+        .select()
+        .from(chirps)
+        .where(eq(chirps.id, chirpId))
+    return query ?? null
 }

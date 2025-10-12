@@ -12,6 +12,8 @@ import { middlewareLogResponses } from "./middlewares/logResponses.js";
 import { middlewareIncrementHits } from "./middlewares/incrementHits.js";
 import { middlewareErrorHandler } from "./middlewares/errorHandler.js";
 import { config } from "./configs.js";
+import { handlerListChirps } from "./api/handlerListChirps.js";
+import { handlerGetChirp } from "./api/handlerGetChirp.js";
 
 const migrationClient = postgres(config.db.url, { max: 1 })
 await migrate(drizzle(migrationClient), config.db.migrationConfig)
@@ -26,6 +28,14 @@ app.use("/app", middlewareIncrementHits, express.static("./src/app"));
 // routes
 app.get("/api/healthz", (req, res, next) => {
     Promise.resolve(handlerReadiness(req, res)).catch(next)
+});
+
+app.get("/api/chirps", (req, res, next) => {
+    Promise.resolve(handlerListChirps(req, res)).catch(next)
+});
+
+app.get("/api/chirps/:chirpId",(req, res, next) => {
+    Promise.resolve(handlerGetChirp(req, res)).catch(next)
 });
 
 app.post("/api/chirps", (req, res, next) => {

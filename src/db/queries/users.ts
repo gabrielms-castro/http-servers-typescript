@@ -1,11 +1,11 @@
 import { db } from '../index.js'
-import { users } from '../schema.js'
+import { NewUser, users } from '../schema.js'
 import { eq } from 'drizzle-orm'
 
-export async function createUser(email: string) {
+export async function createUser(user: NewUser) {
     const [result] = await db
         .insert(users)
-        .values({ email: email })
+        .values(user)
         .onConflictDoNothing()
         .returning();
     return result;

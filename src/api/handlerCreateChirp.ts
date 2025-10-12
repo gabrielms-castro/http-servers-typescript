@@ -16,9 +16,9 @@ export async function handlerCreateChirp(req: Request, res: Response) {
     if (!isMaxChirpsLengthValid(chirpMessage)) throw new BadRequestError("Chirp is too long. Max length is 140");
 
     const cleanedChirpsMessage = removeProfane(chirpMessage);
-    const result = await createChirp(cleanedChirpsMessage, userId)
+    const result = await createChirp({ body: cleanedChirpsMessage, userId: userId })
     res.status(201).json(result)
-}
+} 
 
 // export async function handlerValidateChirp(req: Request, res: Response) {
 

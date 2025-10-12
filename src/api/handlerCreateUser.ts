@@ -17,6 +17,6 @@ export async function handlerCreateUser(req: Request, res: Response) {
         throw new BadRequestError(`E-mail ${email} is already in use.`);
     }
 
-    const result = await createUser(email)
+    const result = await createUser({ email: email })
     res.status(201).json(result)
 }
