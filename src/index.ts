@@ -4,14 +4,14 @@ import { migrate } from 'drizzle-orm/postgres-js/migrator'
 import { drizzle } from 'drizzle-orm/postgres-js'
 
 import { handlerReadiness } from "./api/handlerReadiness.js";
-import { handlerValidateChirp } from "./api/handlerValidateChirp.js";
+import { handlerCreateChirp } from "./api/handlerCreateChirp.js";
+import { handlerCreateUser } from "./api/handlerCreateUser.js";
 import { handlerIncrementHits, handlerResetIncrementHits } from "./api/handlerIncrementHits.js";
 
 import { middlewareLogResponses } from "./middlewares/logResponses.js";
 import { middlewareIncrementHits } from "./middlewares/incrementHits.js";
 import { middlewareErrorHandler } from "./middlewares/errorHandler.js";
 import { config } from "./configs.js";
-import { handlerCreateUser } from "./api/handlerCreateUser.js";
 
 const migrationClient = postgres(config.db.url, { max: 1 })
 await migrate(drizzle(migrationClient), config.db.migrationConfig)
@@ -28,8 +28,8 @@ app.get("/api/healthz", (req, res, next) => {
     Promise.resolve(handlerReadiness(req, res)).catch(next)
 });
 
-app.post("/api/validate_chirp", (req, res, next) => {
-    Promise.resolve(handlerValidateChirp(req, res)).catch(next)
+app.post("/api/chirps", (req, res, next) => {
+    Promise.resolve(handlerCreateChirp(req, res)).catch(next)
 });
 
 app.post("/api/users", (req, res, next) => {
