@@ -9,7 +9,8 @@ type Config = {
 // hold stateful in-memory data to keep track the number of requests that the server processed
 type APIConfig = {
     fileserverHits: number;
-    port: number
+    port: number;
+    platform: string;
 }
 
 type DBConfig = {
@@ -42,7 +43,8 @@ const migrationConfig: MigrationConfig = {
 export const config: Config = {
     api: {
         fileserverHits: 0,
-        port: Number(envOrThrow("PORT"))
+        port: Number(envOrThrow("PORT")),
+        platform: envOrThrow('PLATFORM')
     },
     db: {
         url: envOrThrow('DB_URL'),

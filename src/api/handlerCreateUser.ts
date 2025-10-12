@@ -8,7 +8,7 @@ export async function handlerCreateUser(req: Request, res: Response) {
     const requestBody: parameters = req.body;
     const email = requestBody.email;
 
-    if (!email.match(/\w+@\w+\.com/g)) {
+    if (!email.match(/\w+@\w+/g)) {
         throw new BadRequestError(`Invalid E-mail.`)
     }
 
