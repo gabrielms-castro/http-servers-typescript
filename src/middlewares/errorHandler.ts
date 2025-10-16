@@ -27,9 +27,5 @@ export async function middlewareErrorHandler(err: Error, _: Request, res: Respon
         message = err.message;
     }
 
-    res.status (400).send(JSON.stringify(
-        {
-            "error": message
-        }
-    ));
+    return res.status(statusCode).json({ "error": message });
 }

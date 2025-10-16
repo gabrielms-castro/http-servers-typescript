@@ -1,11 +1,11 @@
-import type { NextFunction, Request, Response } from "express";
+import type { Request, Response } from "express";
 import { profaneWords } from "../configs.js";
 import { BadRequestError } from "../utils/errors.js";
 import { createChirp } from "../db/queries/chirps.js";
 
 export async function handlerCreateChirp(req: Request, res: Response) {
-    type parameters = { body: string, userId: string }
-    const requestBody: parameters = req.body
+    type Parameters = { body: string, userId: string }
+    const requestBody: Parameters = req.body
     const chirpMessage = requestBody.body;
     const userId = requestBody.userId;
 
