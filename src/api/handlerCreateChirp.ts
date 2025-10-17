@@ -2,21 +2,23 @@ import type { Request, Response } from "express";
 import { profaneWords } from "../configs.js";
 import { BadRequestError } from "../utils/errors.js";
 import { createChirp } from "../db/queries/chirps.js";
+import { getBearerToken, validateJWT } from "./auth.js";
+import { config } from "../configs.js";
 
 export async function handlerCreateChirp(req: Request, res: Response) {
-    type Parameters = { body: string, userId: string }
+    type Parameters = { body: string }
+
     const requestBody: Parameters = req.body
     const chirpMessage = requestBody.body;
-    const userId = requestBody.userId;
+    
+    const token = getBearerToken(req);
+    const sub = validateJWT(token, config.api.secret)
 
     if (!chirpMessage) throw new BadRequestError("Invalid request. Missing chirp's body.");
-
-    if (!userId) throw new BadRequestError("Invalid request. Missing user's ID.");
-
     if (!isMaxChirpsLengthValid(chirpMessage)) throw new BadRequestError("Chirp is too long. Max length is 140");
 
     const cleanedChirpsMessage = removeProfane(chirpMessage);
-    const result = await createChirp({ body: cleanedChirpsMessage, userId: userId })
+    const result = await createChirp({ body: cleanedChirpsMessage, userId: sub })
     res.status(201).json(result)
 } 
 

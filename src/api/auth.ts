@@ -1,5 +1,7 @@
 import argon2 from 'argon2';
 import jwt, { JwtPayload } from 'jsonwebtoken';
+import { Request } from 'express';
+import { UnauthorizedError } from '../utils/errors.js';
 
 type Payload = Pick<JwtPayload, "iss" | "sub" | "iat" | "exp">;
 
@@ -32,4 +34,14 @@ export function validateJWT(tokenString: string, secret: string): string {
     } catch {
         throw new Error('Invalid token');
     }
+}
+
+export function getBearerToken(req: Request): string {
+    const authHeader = req.get("Authorization");
+    if (!authHeader) throw new UnauthorizedError("No Authorization header provided.");
+    
+    const [scheme, token] = authHeader.split(" ");
+    if (scheme !== "Bearer" || !token) throw new UnauthorizedError("Invalid Authorization header format. Must be a Bearer token. Example: 'Bearer <TOKEN>'");
+    
+    return token.trim();
 }

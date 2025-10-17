@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeAll } from "vitest";
-import { checkPasswordHash, hashPassword, makeJWT, validateJWT } from "../src/api/auth";
+import { checkPasswordHash, getBearerToken, hashPassword, makeJWT, validateJWT } from "../src/api/auth";
 
 describe("Password Hashing", () => {
   const password1 = "correctPassword123!";
@@ -37,4 +37,30 @@ describe("JWT creation and validation", () => {
         const token = makeJWT(userID, 0, secret);
         expect(() => validateJWT(token, secret)).toThrow();
     });
+})
+
+describe("getBearerToken", () => {
+  it("extracts the token from the Authorization header", () => {
+    const req = new Request("http://example.com", {
+      headers: {
+        "Authorization": "Bearer token123"
+      }
+    });
+    const token = getBearerToken(req);
+    expect(token).toBe("token123");
+  });
+
+  it("throw error if no Authorization header is provided", () => {
+    const req = new Request("https://example.com");
+    expect(() => getBearerToken(req)).toThrow("No Authorization header provided");
+  })
+
+  it("throw error if Authorization header is not a Bearer token", () => {
+    const req = new Request("https://example.com", {
+      headers: {
+        "Authorization": "token123"
+      }
+    });
+    expect(() => getBearerToken(req)).toThrow("Invalid Authorization header format. Must be a Bearer token. Example: 'Bearer <TOKEN>'")
+  })
 })
