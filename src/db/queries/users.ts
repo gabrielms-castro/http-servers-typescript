@@ -26,3 +26,15 @@ export async function deleteUsers() {
         .returning();
     return result
 }
+
+export async function editUserCredentials(userId: string, newEmail?: string, newHashedPassword?: string) {
+    const [result] = await db
+        .update(users)
+        .set({
+            email: newEmail,
+            hashedPassword: newHashedPassword
+        })
+        .where(eq(users.id, userId))
+        .returning();
+    return result; 
+}
