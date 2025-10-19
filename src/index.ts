@@ -21,6 +21,7 @@ import { handlerGetChirp } from "./api/handlerGetChirp.js";
 import { handlerLogin } from "./api/handlerLogin.js";
 import { handlerRefreshTokens, handlerRevokeRefreshTokens } from "./api/handlerRefreshTokens.js";
 import { handlerEditUserCredentials } from "./api/handlerEditUserCredentials.js";
+import { handlerDeleteChirp } from "./api/handlerDeleteChirp.js";
 
 const migrationClient = postgres(config.db.url, { max: 1 })
 await migrate(drizzle(migrationClient), config.db.migrationConfig)
@@ -53,6 +54,9 @@ app.get("/api/chirps/:chirpId",(req, res, next) => {
 app.post("/api/chirps", (req, res, next) => {
     Promise.resolve(handlerCreateChirp(req, res)).catch(next)
 });
+app.delete("/api/chirps/:chirpId", (req, res, next) => {
+    Promise.resolve(handlerDeleteChirp(req, res)).catch(next);
+})
 
 // users
 app.post("/api/users", (req, res, next) => {
