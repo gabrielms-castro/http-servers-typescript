@@ -15,6 +15,7 @@ import { config } from "./configs.js";
 import { handlerListChirps } from "./api/handlerListChirps.js";
 import { handlerGetChirp } from "./api/handlerGetChirp.js";
 import { handlerLogin } from "./api/handlerLogin.js";
+import { handlerRefreshTokens, handlerRevokeRefreshTokens } from "./api/handlerRefreshTokens.js";
 
 const migrationClient = postgres(config.db.url, { max: 1 })
 await migrate(drizzle(migrationClient), config.db.migrationConfig)
@@ -50,6 +51,16 @@ app.post("/api/users", (req, res, next) => {
 app.post("/api/login", (req, res, next) => {
     Promise.resolve(handlerLogin(req, res)).catch(next)
 });
+
+app.post("/api/refresh", (req, res, next) => {
+    Promise.resolve(handlerRefreshTokens(req, res)).catch(next)
+})
+
+app.post("/api/revoke", (req, res, next) => {
+    Promise.resolve(handlerRevokeRefreshTokens(req, res)).catch(next)
+})
+
+
 
 app.post("/admin/reset", (req, res, next) => {
     Promise.resolve(handlerResetIncrementHits(req, res)).catch(next)
