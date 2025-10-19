@@ -16,10 +16,6 @@ export async function getUser(email: string) {
   return result;
 }
 
-export async function getUserFromRefreshToken(token: string) {
-    
-}
-
 export async function deleteUsers() {
     const [result] = await db
         .delete(users)
