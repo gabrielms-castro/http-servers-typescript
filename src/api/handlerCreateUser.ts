@@ -33,7 +33,8 @@ export async function handlerCreateUser(req: Request, res: Response) {
             id: result.id,
             email: result.email,
             createdAt: result.createdAt,
-            updatedAt: result.updatedAt
+            updatedAt: result.updatedAt,
+            isChirpyRed: result.isChirpyRed
         } satisfies UserResponse)
     }
 }

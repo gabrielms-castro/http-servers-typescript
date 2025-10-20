@@ -22,6 +22,7 @@ import { handlerLogin } from "./api/handlerLogin.js";
 import { handlerRefreshTokens, handlerRevokeRefreshTokens } from "./api/handlerRefreshTokens.js";
 import { handlerEditUserCredentials } from "./api/handlerEditUserCredentials.js";
 import { handlerDeleteChirp } from "./api/handlerDeleteChirp.js";
+import { handlerPolkaWebhook } from "./api/handlerPolkaWebhook.js";
 
 const migrationClient = postgres(config.db.url, { max: 1 })
 await migrate(drizzle(migrationClient), config.db.migrationConfig)
@@ -77,6 +78,11 @@ app.post("/api/refresh", (req, res, next) => {
 })
 app.post("/api/revoke", (req, res, next) => {
     Promise.resolve(handlerRevokeRefreshTokens(req, res)).catch(next)
+})
+
+// polka webhook - payment service //
+app.post("/api/polka/webhooks", (req, res, next) => {
+    Promise.resolve(handlerPolkaWebhook(req, res)).catch(next)
 })
 
 // admin //

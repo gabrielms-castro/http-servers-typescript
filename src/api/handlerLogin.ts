@@ -40,6 +40,7 @@ export async function handlerLogin(req: Request, res: Response) {
     res.status(200).json({
         id: queryUser.id,
         email: queryUser.email,
+        isChirpyRed: queryUser.isChirpyRed,
         createdAt: queryUser.createdAt,
         updatedAt: queryUser.updatedAt,
         token: jwtToken,
