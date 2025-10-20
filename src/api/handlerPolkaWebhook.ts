@@ -1,8 +1,13 @@
 import { Request, Response } from 'express';
 import { upgradeUserToChirpyRed } from '../db/queries/users.js';
-import { BadRequestError } from '../utils/errors.js';
+import { BadRequestError, UnauthorizedError } from '../utils/errors.js';
+import { getApiKey } from './auth.js';
+import { config } from '../configs.js';
 
 export async function handlerPolkaWebhook(req: Request, res: Response) {
+    const key = getApiKey(req);
+    if (key !== config.api.polkaKey) throw new UnauthorizedError("Invalid API key.");
+
     type Parameters = {
         event: string;
         data: {

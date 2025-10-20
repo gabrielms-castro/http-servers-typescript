@@ -56,3 +56,12 @@ export function makeRefreshToken() {
     const buf = randomBytes(32)
     return buf.toString('hex');
 }
+
+export function getApiKey(req: Request): string {
+    const authHeader = req.get("Authorization");
+    if (!authHeader) throw new UnauthorizedError("No Authorization header provided.");
+
+    const [scheme, key] = authHeader.split(" ");
+    if (scheme !== "ApiKey" || !key) throw new UnauthorizedError("Invalid Authorization header format. Must be an ApiKey");
+    return key.trim();
+}
